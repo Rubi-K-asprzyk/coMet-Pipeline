@@ -4,25 +4,13 @@
 
 suppressPackageStartupMessages(if(!require(cli)){install.packages("cli");library(cli)})
 # Display a beginning message. 
-cat(rule(left = "SCRIPT COMET_METRICS.R BEGINNING", line_col = "red", line = "-", col = "br_red")) 
+cat(rule(left = "SCRIPT COMET_METRICS_MERGE.R BEGINNING", line_col = "red", line = "-", col = "br_red")) 
 
-# ---------------------------------------------------------------------- #
-# coMet_Metrics : Computes a variety of pĥylogenetic diversity metrics.  #
-# ---------------------------------------------------------------------- #
+# ---------------------------------------------------------------- #
+# coMet_Metrics_Merge : Merge the pĥylogenetic diversity metrics.  #
+# ---------------------------------------------------------------- #
 
-# This script is the main part of the coMet_pipeline and cannot be used without the outputs of the coMet_ComSim script.
-# It is used to compute various diversity metrics from ecological community matrices created under coMet scenarios. 
-# By default, it comes with 4 different computation possibilities to test for different sub-scenarios:
-  # A = Intra-Core: Metrics are computed for each core of habitats.
-  # B = Inter-Core: Metrics are computed between cores of habitats.
-  # C = Inter-Ecotone: Metrics are computed between each ecotones of habitats.
-  # D = Intra_Ecotone: Metrics are computed for each ecotones of habitats.
-
-# As input, this script takes: 
-  # 1: MANDATORY - The coMet_ConfigFile(s) of the scenario we want to analyze. 
-  # This script will automatically navigate through the repository path to find all the needed files. 
-
-# If we want to compute metrics for an empirical data set, please check for the individual code for each metric. 
+# Merging the results of each metric for each scenario and computing the significativity of each metrics VS the Null Model. 
 
 # ------------------------------ #
 ##### STEP 0: INITIALISATION #####
@@ -66,7 +54,7 @@ cli_alert_success("Packages correctly loaded !")
   #### . Local Mode . ####
 
 Parameters <- list()
-Parameters$Config <- "coMet_ConfigFiles/Equalizing100_Sig2.R" #EQ100_Sig2
+Parameters$Config <- "Foo.R"
 registerDoParallel(10)
 
 # ----- #
@@ -502,28 +490,6 @@ cli_alert_success("Functions correctly created !")
 ##### STEP 1: MERGING THE METRICS RESULTS  #####
 # -------------------------------------------- #
 
-#### . Local Mode . ####
-PD <- FALSE # Done
-FJ <- FALSE # Done
-PSV <- FALSE # Done
-PDab <- FALSE # Done
-MPD <- FALSE # Done
-MNTD <- FALSE # Done
-ED <- FALSE # Done
-PDb <- FALSE # Done
-UniPhylo <- FALSE # Done
-COMDIST <- FALSE # Done
-S <- FALSE # Done
-Dab <- FALSE # Done
-PIst <- FALSE # Done
-PCD <- FALSE # Done
-DISC <- FALSE # Done
-
-Simpson <- FALSE
-InvSimpson <- FALSE
-BC <- FALSE
-SR <- FALSE
-Sorensen <- TRUE
 
 ##### ______________________________________________________________________________________________________________________________________ #####
 
@@ -1028,50 +994,48 @@ if (S == FALSE) {
 # ----- # 
 cat(rule(left = "Merging of S_Metrics", line_col = "yellow", line = "-", col = "br_yellow"))
 
-# File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_SokalSneath_",recursive = T, full.names = T)
-# suppressMessages(S_SokalSneath_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
-# write.csv(S_SokalSneath_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine.csv"))
-# Mean_S_SokalSneath <- Stat_signif_mean(S_SokalSneath_Total ,"S_SokalSneath_Pavoine")
-# Signif <- Stat_signif(data = S_SokalSneath_Total, Name = "S_SokalSneath", Metric = "S_SokalSneath", AB = "Beta")
-# write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine_Signif.csv"))
-# Mean_Signif <- Stat_signif_mean_2(data = Mean_S_SokalSneath, Metric = "S_SokalSneath")
-# write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine_Mean_Signif.csv"))
-# rm(S_SokalSneath_Total) ; gc()
-# cli_alert_success("S_SokalSneath_Total")
+ File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_SokalSneath_",recursive = T, full.names = T)
+ suppressMessages(S_SokalSneath_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
+ write.csv(S_SokalSneath_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine.csv"))
+ Mean_S_SokalSneath <- Stat_signif_mean(S_SokalSneath_Total ,"S_SokalSneath_Pavoine")
+ Signif <- Stat_signif(data = S_SokalSneath_Total, Name = "S_SokalSneath", Metric = "S_SokalSneath", AB = "Beta")
+ write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine_Signif.csv"))
+ Mean_Signif <- Stat_signif_mean_2(data = Mean_S_SokalSneath, Metric = "S_SokalSneath")
+ write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_SokalSneath_Pavoine_Mean_Signif.csv"))
+ rm(S_SokalSneath_Total) ; gc()
+ cli_alert_success("S_SokalSneath_Total")
+File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Jaccard_",recursive = T, full.names = T)
+suppressMessages(S_Jaccard_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
+write.csv(S_Jaccard_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine.csv"))
+Mean_S_Jaccard <- Stat_signif_mean(S_Jaccard_Total ,"S_Jaccard_Pavoine")
+Signif <- Stat_signif(data = S_Jaccard_Total, Name = "S_Jaccard", Metric = "S_Jaccard", AB = "Beta")
+write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine_Signif.csv"))
+Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Jaccard, Metric = "S_Jaccard")
+write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine_Mean_Signif.csv"))
+rm(S_Jaccard_Total) ; gc()
+cli_alert_success("S_Jaccard_Total")
 
+File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Sorensen_",recursive = T, full.names = T)
+suppressMessages(S_Sorensen_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
+write.csv(S_Sorensen_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine.csv"))
+Mean_S_Sorensen <- Stat_signif_mean(S_Sorensen_Total ,"S_Sorensen_Pavoine")
+Signif <- Stat_signif(data = S_Sorensen_Total, Name = "S_Sorensen", Metric = "S_Sorensen", AB = "Beta")
+write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine_Signif.csv"))
+Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Sorensen, Metric = "S_Sorensen")
+write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine_Mean_Signif.csv"))
+rm(S_Sorensen_Total) ; gc()
+cli_alert_success("S_Sorensen_Total")
 
-#File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Jaccard_",recursive = T, full.names = T)
-#suppressMessages(S_Jaccard_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
-#write.csv(S_Jaccard_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine.csv"))
-#Mean_S_Jaccard <- Stat_signif_mean(S_Jaccard_Total ,"S_Jaccard_Pavoine")
-#Signif <- Stat_signif(data = S_Jaccard_Total, Name = "S_Jaccard", Metric = "S_Jaccard", AB = "Beta")
-#write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine_Signif.csv"))
-#Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Jaccard, Metric = "S_Jaccard")
-#write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Jaccard_Pavoine_Mean_Signif.csv"))
-#rm(S_Jaccard_Total) ; gc()
-#cli_alert_success("S_Jaccard_Total")
-#
-#File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Sorensen_",recursive = T, full.names = T)
-#suppressMessages(S_Sorensen_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
-#write.csv(S_Sorensen_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine.csv"))
-#Mean_S_Sorensen <- Stat_signif_mean(S_Sorensen_Total ,"S_Sorensen_Pavoine")
-#Signif <- Stat_signif(data = S_Sorensen_Total, Name = "S_Sorensen", Metric = "S_Sorensen", AB = "Beta")
-#write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine_Signif.csv"))
-#Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Sorensen, Metric = "S_Sorensen")
-#write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Sorensen_Pavoine_Mean_Signif.csv"))
-#rm(S_Sorensen_Total) ; gc()
-#cli_alert_success("S_Sorensen_Total")
-#
-#File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Ochiai_",recursive = T, full.names = T)
-#suppressMessages(S_Ochiai_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
-#write.csv(S_Ochiai_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine.csv"))
-#Mean_S_Ochiai <- Stat_signif_mean(S_Ochiai_Total ,"S_Ochiai_Pavoine")
-#Signif <- Stat_signif(data = S_Ochiai_Total, Name = "S_Ochiai", Metric = "S_Ochiai", AB = "Beta")
-#write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine_Signif.csv"))
-#Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Ochiai, Metric = "S_Ochiai")
-#write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine_Mean_Signif.csv"))
-#rm(S_Ochiai_Total) ; gc()
-#cli_alert_success("S_Ochiai_Total")
+File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Ochiai_",recursive = T, full.names = T)
+suppressMessages(S_Ochiai_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
+write.csv(S_Ochiai_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine.csv"))
+Mean_S_Ochiai <- Stat_signif_mean(S_Ochiai_Total ,"S_Ochiai_Pavoine")
+Signif <- Stat_signif(data = S_Ochiai_Total, Name = "S_Ochiai", Metric = "S_Ochiai", AB = "Beta")
+write.csv(Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine_Signif.csv"))
+Mean_Signif <- Stat_signif_mean_2(data = Mean_S_Ochiai, Metric = "S_Ochiai")
+write.csv(Mean_Signif,paste0("coMet_ComSim_Outputs/",Scenario,"/Metrics/Scenario",Scenario,"_S_Ochiai_Pavoine_Mean_Signif.csv"))
+rm(S_Ochiai_Total) ; gc()
+cli_alert_success("S_Ochiai_Total")
 
 File <- list.files(path = paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/S"),pattern = "_S_Beta_",recursive = T, full.names = T)
 suppressMessages(S_Beta_Total <- foreach(j = 1:length(File), .combine = full_join) %dopar% {Raw <- read.csv(File[j],row.names = 1)})
@@ -1309,9 +1273,6 @@ Mean_SR <- Stat_signif_mean(SR_Total ,"SR")
 SR_Total <- SR_Total %>% drop_na()
 Mean_SR <- Mean_SR %>% drop_na()
 
-# --- SIGNIFICATIVITY --------------------------------------------------------------- #
-
-# TEMA LA TAILLE DU GLAND, ON PEUT PAS CALCULER LA SIGNIFICATIVTE SANS MODÈLE NUL BAAAHAHA
 
 cat(rule(left = "DONE: BRAY-CURTIS INDEX", line_col = "yellow", line = "-", col = "br_yellow"))     
 
@@ -1352,7 +1313,6 @@ cat(rule(left = "DONE: SORENSEN INDEX", line_col = "yellow", line = "-", col = "
 } # End of Sorensen
 
 # ------------------------------------------------------ #
-
 
 
 # END OF THE SCRIPT

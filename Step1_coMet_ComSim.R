@@ -1,8 +1,10 @@
 #!/usr/bin/env Rscript
 
-# ----------------------------------------#
-# Simulation Script: G.Dauby / K.Thibault #
-# --------------------------------------- #
+##################
+# coMet_ComSim.R #
+##################
+
+# The goal of this script is to create the communities following the parameters and assembly rules wanted. These parameters are entered/modified in the configuration file (as example: Foo.R)
 
 suppressPackageStartupMessages(if(!require(cli)){install.packages("cli");library(cli)})
 # Display a beginning message. 
@@ -58,6 +60,15 @@ arg_parser <- add_argument(arg_parser, arg = "--debug", short = "-d", nargs = 1 
 
 # Parse the arguments
 Parameters <- parse_args(parser = arg_parser, argv = commandArgs(trailingOnly = T))
+
+  #### . Local Mode . ####
+
+# Parameters <- list()
+# Parameters$Config <- "Foo.R"
+# Parameters$Rep <- 3
+# Parameters$debug <- FALSE
+
+  # ----- #
 
 # Load them into the environnement
 source(Parameters$Config)

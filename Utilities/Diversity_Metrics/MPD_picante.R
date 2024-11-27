@@ -34,7 +34,7 @@ mpd_V2 <- function(Sample, PW_distances, abundance.weighted=FALSE , intra = F)
       else {
         # OLD
         # Initial portion of the script
-          mpd[i] <- mean(sample.dis[lower.tri(sample.dis)])
+        #  mpd[i] <- mean(sample.dis[lower.tri(sample.dis)])
         
         # NEW
         # Just create a parameter to keep or not the diagonal. 

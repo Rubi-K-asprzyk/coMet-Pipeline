@@ -75,8 +75,8 @@ options(warn = -1)
 
   #### . Local Mode . ####
 
-Parameters <- list()
-Parameters$Config <- "coMet_ConfigFiles/Stabilizing100_Sig5.R"
+# Parameters <- list()
+# Parameters$Config <- "Foo.R"
 
     # ----- #
 

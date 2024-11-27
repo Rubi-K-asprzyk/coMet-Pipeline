@@ -12,17 +12,11 @@ cat(rule(left = "SCRIPT COMET_METRICS.R BEGINNING", line_col = "red", line = "-"
 
 # This script is the main part of the coMet_pipeline and cannot be used without the outputs of the coMet_ComSim script.
 # It is used to compute various diversity metrics from ecological community matrices created under coMet scenarios. 
-# By default, it comes with 4 different computation possibilities to test for different sub-scenarios:
-  # A = Intra-Core: Metrics are computed for each core of habitats.
-  # B = Inter-Core: Metrics are computed between cores of habitats.
-  # C = Inter-Ecotone: Metrics are computed between each ecotones of habitats.
-  # D = Intra_Ecotone: Metrics are computed for each ecotones of habitats.
 
-# As input, this script takes: 
-  # 1: MANDATORY - The coMet_ConfigFile(s) of the scenario we want to analyze. 
-  # This script will automatically navigate through the repository path to find all the needed files. 
-
-# If we want to compute metrics for an empirical data set, please check for the individual code for each metric. 
+# As input, this script takes coMet_ConfigFile(s) of the scenario we want to analyze. 
+  
+# To launch it on a local machine, please use this command line: Rscript ./Step6_coMet_Metrics.R Foo.R -R 1
+# This script will automatically navigate through the repository path to find all the needed files. 
 
 # ------------------------------ #
 ##### STEP 0: INITIALISATION #####
@@ -472,7 +466,7 @@ cat(rule(left = "F and J", line_col = "yellow", line = "-", col = "br_yellow"))
 tic() 
 
 # Load the observed pairwise distances
-Obs_PW <- read.csv(paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Whole_Communities/Scenario",Scenario,"_Step4_Intra_PW_Distances_Observed",Rep,".csv"), row.names = 1)
+Obs_PW <- read.csv(paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Whole_Communities/TreeDistances/Scenario",Scenario,"_Step4_Intra_PW_Distances_Observed",Rep,".csv"), row.names = 1)
 
 
  # Create the NULL_PW by using the Obs_PW_Trimmed and the tips_label from the list_Phylo_NULL trees. 
@@ -861,58 +855,6 @@ MPD_Total <- full_join(MPD_Obs, MPD_Null, by = join_by(Rep, Sample, Group, Habit
 Dp_Total <- full_join(Dp_Obs, Dp_Null, by = join_by(Rep, Sample, Group, Habitat, Spatial)) 
 # write.csv(Dp_Total,paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Metrics/Temporary/MPD/Scenario",Scenario,"_Dp_Hardy_",Rep,".csv"))
   
-# TEST - TEST - TEST #
-
-# Remove any unwanted columns
-  # Raw_Data <- Dp_Total %>%
-  #   select(-any_of(c("Sample_A","Sample_B", "Habitat_A", "Habitat_B", "Spatial_A", "Spatial_B", "Habitat", "Spatial")))
-  # 
-  # # Extract the Metric Name
-  # Name <- colnames(Raw_Data)[4]
-  # 
-  # # Transform the data to add a column for the null vs obs data
-  # Raw_Trans <- Raw_Data %>%
-  #   pivot_longer(
-  #     cols = contains(Name, ignore.case = TRUE, vars = NULL),
-  #     names_to = "OBSvsNM", values_to = "Value")
-  # 
-  # # Change the values contained in the new column
-  # Raw_Trans$OBSvsNM[grep("NM",Raw_Trans$OBSvsNM)] <- paste0(Name,"_NM")
-  # 
-  # # Transform all the stuff into factor
-  # Raw_Trans <-  Raw_Trans %>%
-  #   mutate_at(vars(Rep,Sample,Group,), factor) %>%
-  #   as.data.frame()
-  # 
-  # Raw_Data <- Raw_Data %>%
-  #   mutate_at(vars(Rep,Sample,Group,), factor) %>%
-  #   as.data.frame()
-  # 
-  # # ----- #
-  # 
-  # #### . Observed VS Null Model . ###
-  # 
-  # 
-  # # Compute summary statistics
-  # Sum_Raw <- Raw_Trans %>%
-  #   group_by(OBSvsNM) %>%  # Group_by to have two groups in a tibble for faceting
-  #   get_summary_stats(Value,type = "common") %>% # Compute the summary statistics for each groups
-  #   # Draw the summary statistics
-  #   ggsummarytable(x = "OBSvsNM",           # Sub scenario
-  #                  y = c("n","min", "max", "mean","sd"),  # Choose the metrics we want to display
-  #                  digits = 4,                        # Number of digits
-  #                  size = 4,                          # Size of the text
-  #                  ggtheme = arrange_theme() + theme(axis.title.x=element_blank())) %>% as.ggplot()
-  # 
-  # # Create the density plot
-  # Dens_Raw <- Raw_Trans %>%
-  #   # Plotting
-  #   ggplot(aes(x = Value, group = OBSvsNM, color = OBSvsNM, fill = OBSvsNM)) +  # We need the strange ."as.name" use with "aes_" to resolve the problem of finding the column containing the metric values
-  #   geom_density(alpha = 0.3) +
-  #   theme(legend.position= "right",
-  #         axis.title.x=element_blank(),
-  #         legend.title =element_blank())
-
 
 # --- #
 cat(rule(left = "DONE: MPD and Dp", line_col = "yellow", line = "-", col = "br_yellow")) 
@@ -936,7 +878,7 @@ cat(rule(left = "MNTD and MNTDab", line_col = "yellow", line = "-", col = "br_ye
 tic()
   
 # Load the observed pairwise distances
-Obs_PW <- read.csv(paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Whole_Communities/Scenario",Scenario,"_Step4_Intra_PW_Distances_Observed",Rep,".csv"), row.names = 1)
+Obs_PW <- read.csv(paste0(getwd(),"/coMet_ComSim_Outputs/",Scenario,"/Whole_Communities/TreeDistances/Scenario",Scenario,"_Step4_Intra_PW_Distances_Observed",Rep,".csv"), row.names = 1)
 
 # Create the NULL_PW by using the Obs_PW_Trimmed and the tips_label from the list_Phylo_NULL trees. 
 Null_PW <-   

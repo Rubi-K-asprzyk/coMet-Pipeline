@@ -1,12 +1,14 @@
 #!/usr/bin/env Rscript
 
-# ----------------------------------------#
-# Simulation Script: G.Dauby / K.Thibault #
-# --------------------------------------- #
+########################
+# coMet_ComSim_Merge.R #
+########################
+
+# The goal of this script is to combined all the replicates from the first step into one file per "Scenario" for further processing. 
 
 suppressPackageStartupMessages(if(!require(cli)){install.packages("cli");library(cli)})
 # Display a beginning message. 
-cat(rule(left = "SCRIPT COMET_COMSIM.R BEGINNING", line_col = "red", line = "-", col = "br_red")) 
+cat(rule(left = "SCRIPT COMET_COMSIM_MERGE.R BEGINNING", line_col = "red", line = "-", col = "br_red")) 
 cat(rule(left = "INITIALISATION", line_col = "green", line = "-", col = "br_green"))
 
 # ------------------------------ #
@@ -43,8 +45,8 @@ source("Utilities/Generate_Hab.R") # The function is called "generate_hab"
 
 #### . Local Mode . ####
 
-Parameters <- list()
-Parameters$Config <- "coMet_ConfigFiles/Equalizing100_Sig5.R"
+# Parameters <- list()
+# Parameters$Config <- "Foo.R"
 
 #### . Argument Parser . ####
 

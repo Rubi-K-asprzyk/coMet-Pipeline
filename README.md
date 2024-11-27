@@ -1,6 +1,5 @@
 
-# ----- WELCOME TO THE COMET PIPELINE ----- #
-
+ WELCOME TO THE COMET PIPELINE 
 
 The coMet pipeline (standing for COMmunity METrics) is a pipeline developped to create communities following assembly rules and compute phylogenetic diversity metrics based on these communities. 
 It is written mainly in R (the community simulator is written in C) and operated by command line. It is, by nature, designed to be launched on remote machines in slurm environement to create numerous replicates.
